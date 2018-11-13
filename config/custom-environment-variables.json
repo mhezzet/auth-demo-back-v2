@@ -1,4 +1,5 @@
 {
+  "PORT": "PORT",
   "dbURI": "dbURI",
   "jwtSecret": "jwtSecret",
   "env": "NODE_ENV",
