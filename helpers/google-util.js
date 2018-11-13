@@ -3,7 +3,6 @@ const config = require('config');
 
 const googleConfig = {
   clientId: config.get('GOOGLE_CLIENT_ID'),
-  clientSecret: config.get('GOOGLE_CLIENT_SECRET'),
   redirect: config.get('GOOGLE_REDIRECT')
 };
 
@@ -15,7 +14,7 @@ const defaultScope = [
 function createConnection() {
   return new google.auth.OAuth2(
     googleConfig.clientId,
-    googleConfig.clientSecret,
+    null,
     googleConfig.redirect
   );
 }

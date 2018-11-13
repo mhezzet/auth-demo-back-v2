@@ -1,6 +1,14 @@
 const User = require('../models/User');
 const genGoogleUrl = require('../helpers/google-util');
-const OauthUrl = genGoogleUrl();
+const gentFacebookUrl = require('../helpers/facebook-util');
+const googleUrl = genGoogleUrl();
+const facebookUrl = gentFacebookUrl();
+
+/**
+|--------------------------------------------------
+| Local auth
+|--------------------------------------------------
+*/
 
 async function signInLocal(req, res) {
   const { email, password } = req.body;
@@ -16,8 +24,14 @@ async function signInLocal(req, res) {
   res.send(token);
 }
 
+/**
+|--------------------------------------------------
+| Google auth
+|--------------------------------------------------
+*/
+
 function sendGoogleUrl(req, res) {
-  res.send(OauthUrl);
+  res.send(googleUrl);
 }
 
 async function signInGoogle(req, res) {
@@ -34,8 +48,39 @@ async function signInGoogle(req, res) {
   res.send(user.genToken());
 }
 
+/**
+|--------------------------------------------------
+| Facebook auth
+|--------------------------------------------------
+*/
+
+async function sendFacebookUrl(req, res) {
+  res.send(facebookUrl);
+}
+
+async function signInFacebook(req, res) {
+  const { email, id, picture } = req.user;
+
+  let user = await User.findOne({ 'facebook.id': id });
+  if (user) return res.send(user.genToken());
+
+  user = new User({
+    method: 'facebook',
+    facebook: {
+      id,
+      email,
+      picture: picture.data.url
+    }
+  });
+
+  await user.save();
+  res.send(user.genToken());
+}
+
 module.exports = {
   signInLocal,
   sendGoogleUrl,
-  signInGoogle
+  signInGoogle,
+  sendFacebookUrl,
+  signInFacebook
 };
