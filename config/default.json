@@ -1,0 +1,9 @@
+{
+  "PORT": 3000,
+  "dbURI": "mongodb://localhost/apiAuth",
+  "jwtSecret": "123",
+  "env": "development",
+  "GOOGLE_CLIENT_ID": "539492742685-hb4d1j9u17f5curru38e06b1aa8v1h97.apps.googleusercontent.com",
+  "GOOGLE_CLIENT_SECRET": "bAeJp9eTpjhBo5hVFtC2uQi6",
+  "GOOGLE_REDIRECT": "http://localhost:3000/api/auth/google"
+}
