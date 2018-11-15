@@ -12,6 +12,7 @@ const corsOptions = {
 module.exports = function(app) {
   app.use(cors(corsOptions));
   app.use(express.json());
+  app.use(express.static('public'))
   app.use('/api/users', users);
   app.use('/api/auth', auth);
   if (config.get('env') === 'production') {
