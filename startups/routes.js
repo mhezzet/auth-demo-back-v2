@@ -12,9 +12,10 @@ const corsOptions = {
 module.exports = function(app) {
   app.use(cors(corsOptions));
   app.use(express.json());
-  app.use(express.static('public'))
+  app.use(express.static('public'));
   app.use('/api/users', users);
   app.use('/api/auth', auth);
+  app.use('/*', express.static('public'));
   if (config.get('env') === 'production') {
     app.use(helmet());
     app.use(compression());
