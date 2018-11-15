@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const _ = require('lodash');
 
 async function signUp(req, res) {
   const { email, password } = req.body;
@@ -16,9 +17,10 @@ async function signUp(req, res) {
   await user.save();
 
   const token = user.genToken();
+
   res
     .header('x-auth-token', token)
-    .send({ _id: user._id, email: user.local.email });
+    .send(_.pick(user.local, ['email', 'picture']));
 }
 
 async function profile(req, res) {

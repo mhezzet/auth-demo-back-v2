@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const User = require('../models/User');
 const genGoogleUrl = require('../helpers/google-util');
 const gentFacebookUrl = require('../helpers/facebook-util');
@@ -21,7 +22,9 @@ async function signInLocal(req, res) {
 
   const token = user.genToken();
 
-  res.send(token);
+  res
+    .header('x-auth-token', token)
+    .send(_.pick(user.local, ['email', 'picture']));
 }
 
 /**
@@ -36,16 +39,22 @@ function sendGoogleUrl(req, res) {
 
 async function signInGoogle(req, res) {
   const { id, email, picture } = req.user;
-
   let user = await User.findOne({ 'google.id': id });
-  if (user) return res.send(user.genToken());
+  if (user)
+    return res
+      .header('x-auth-token', user.genToken())
+      .send(_.pick(user.google, ['email', 'picture']));
 
   user = new User({
     method: 'google',
     google: { id, email, picture }
   });
   await user.save();
-  res.send(user.genToken());
+  const token = user.genToken();
+
+  res
+    .header('x-auth-token', token)
+    .send(_.pick(user.google, ['email', 'picture']));
 }
 
 /**
@@ -62,7 +71,10 @@ async function signInFacebook(req, res) {
   const { email, id, picture } = req.user;
 
   let user = await User.findOne({ 'facebook.id': id });
-  if (user) return res.send(user.genToken());
+  if (user)
+    return res
+      .header('x-auth-token', user.genToken())
+      .send(_.pick(user.facebook, ['email', 'picture']));
 
   user = new User({
     method: 'facebook',
@@ -74,7 +86,11 @@ async function signInFacebook(req, res) {
   });
 
   await user.save();
-  res.send(user.genToken());
+  const token = user.genToken();
+
+  res
+    .header('x-auth-token', token)
+    .send(_.pick(user.facebook, ['email', 'picture']));
 }
 
 module.exports = {

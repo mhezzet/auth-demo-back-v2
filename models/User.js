@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
       type: String,
       maxlength: 1024,
       minlength: 3
+    },
+    picture: {
+      type: String,
+      default:"https://vignette.wikia.nocookie.net/villains/images/6/61/Unknown_Face_Of_The_Collector.jpg/revision/latest?cb=20171207211806"
     }
   },
   google: {
